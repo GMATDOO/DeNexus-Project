@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 
 @Entity
 @Table(name= "Samples")
-@MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 public abstract class Sample {
