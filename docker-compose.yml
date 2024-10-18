@@ -1,8 +1,22 @@
 services:
+  app:
+    build:
+      context: .  # Este es el directorio donde está tu Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://DeNexus-Project.mysql.database.azure.com:3306/DeNexus-Project
+      - SPRING_DATASOURCE_USERNAME=tu_usuario_azure
+      - SPRING_DATASOURCE_PASSWORD=tu_password_azure
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+    ports:
+      - 8080:8080  # El puerto donde tu aplicación estará disponible
+    depends_on:
+      - mysql  # Ahora app depende del servicio mysql, no de sí mismo
+
   mysql:
-    image: mysql:9.0
+    image: mysql:8.0
     environment:
       - MYSQL_DATABASE=DeNexus-Project
-      - MYSQL_ROOT_PASSWORD=P4ssword!
+      - MYSQL_ROOT_PASSWORD=tu_password_azure
     ports:
-      - 3307:3306
+      - 3306:3306  # Cambia el puerto si es necesario para tu configuración
+
