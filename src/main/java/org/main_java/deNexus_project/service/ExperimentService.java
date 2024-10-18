@@ -1,7 +1,9 @@
 package org.main_java.deNexus_project.service;
 
 import org.main_java.deNexus_project.domain.Experiment;
+import org.main_java.deNexus_project.domain.samples.Sample;
 import org.main_java.deNexus_project.model.ExperimentDTO;
+import org.main_java.deNexus_project.model.samplesDTO.SampleDTO;
 import org.main_java.deNexus_project.repos.ExperimentRepository;
 import org.main_java.deNexus_project.util.NotFoundException;
 import org.main_java.deNexus_project.repos.samples_repos.SampleRepository;
@@ -97,6 +99,30 @@ public class ExperimentService {
             List<Experiment> experiments = experimentRepository.findAll();
             return experiments.stream()
                     .map(this::mapToDTO)
+                    .collect(Collectors.toList());
+        });
+    }
+
+    // Obtener todas las muestras asociadas a un experimento específico
+    public List<SampleDTO> getSamplesByExperimentId(Long experimentId) {
+        // Obtener todas las muestras asociadas al experimento
+        List<Sample> samples = sampleRepository.findByExperimentId(experimentId);
+
+        // Convertir las muestras a DTOs para devolverlas
+        return samples.stream()
+                .map(sample -> sampleService.sampleToDTO(sample))  // Usamos sampleService para mapear a DTO
+                .collect(Collectors.toList());
+    }
+
+
+    // Obtener todas las muestras asociadas a un experimento específico (Async)
+    @Async
+    @Transactional(readOnly = true)
+    public CompletableFuture<List<SampleDTO>> getSamplesByExperimentIdAsync(Long experimentId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Sample> samples = sampleRepository.findByExperimentId(experimentId);
+            return samples.stream()
+                    .map(sample -> sampleService.sampleToDTO(sample))
                     .collect(Collectors.toList());
         });
     }

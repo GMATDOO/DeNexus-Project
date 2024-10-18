@@ -26,5 +26,7 @@ public class ExperimentDTO {
     private LocalDateTime endDate;
 
     private List<SampleDTO> samples;
+
+    private List<ChartDTO> charts;
 }
 

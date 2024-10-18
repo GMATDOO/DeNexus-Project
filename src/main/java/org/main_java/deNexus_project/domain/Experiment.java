@@ -4,15 +4,20 @@ package org.main_java.deNexus_project.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.main_java.deNexus_project.domain.samples.Sample;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name= "Experimentos")
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Experiment {
@@ -32,5 +37,9 @@ public class Experiment {
 
     @OneToMany(mappedBy = "experiment", cascade = CascadeType.ALL)
     private List<Sample> samples = new ArrayList<>();
+
+    @OneToMany(mappedBy = "experiment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Chart> charts;
+
 
 }

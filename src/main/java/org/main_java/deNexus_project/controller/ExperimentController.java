@@ -2,6 +2,7 @@ package org.main_java.deNexus_project.controller;
 
 import org.main_java.deNexus_project.domain.Experiment;
 import org.main_java.deNexus_project.model.ExperimentDTO;
+import org.main_java.deNexus_project.model.samplesDTO.SampleDTO;
 import org.main_java.deNexus_project.service.ExperimentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,19 @@ public class ExperimentController {
     public ResponseEntity<Void> deleteExperiment(@PathVariable Long id) {
         experimentService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Obtener todas las muestras asociadas a un experimento específico
+    @GetMapping("/{experimentId}/samples")
+    public ResponseEntity<List<SampleDTO>> getSamplesByExperimentId(@PathVariable Long experimentId) {
+        List<SampleDTO> samples = experimentService.getSamplesByExperimentId(experimentId);
+        return ResponseEntity.ok(samples);
+    }
+
+    @GetMapping("/{experimentId}/samples/async")
+    public CompletableFuture<ResponseEntity<List<SampleDTO>>> getSamplesByExperimentIdAsync(@PathVariable Long experimentId) {
+        return experimentService.getSamplesByExperimentIdAsync(experimentId)
+                .thenApply(ResponseEntity::ok);
     }
 }
 
