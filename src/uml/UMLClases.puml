@@ -1,0 +1,194 @@
+@startuml
+title Diagrama UML con Clase Experiment para Gestionar Grupos de Muestras
+
+' ======== Clases del Dominio ========
+
+' Clase abstracta Sample (Muestra)
+abstract class Sample {
+    - Integer id
+    + Integer getId()
+    + void setId(Integer id)
+}
+
+' Clase CyberAttackSample (MuestraUno)
+class CyberAttackSample extends Sample {
+    - String author
+    - String target
+    - String description
+    - String attackType
+    - String targetClassification
+    - String attackClassification
+    - String link
+    - String tags
+    - LocalDate date
+    - Set<String> regions
+    ' Getters y setters
+}
+
+' Clase SecurityIncidentSample (MuestraDos)
+class SecurityIncidentSample extends Sample {
+    - String eventDescription
+    - String actor
+    - String actorType
+    - String eventType
+    - String organization
+    - String eventSubtype
+    - String motive
+    - String eventSource
+    - String industryCode
+    - Integer dnxId
+    - LocalDate date
+    - Set<String> regions
+    - Set<String> impactTypes
+    ' Getters y setters
+}
+
+' Clase Experiment para gestionar grupos de muestras
+class Experiment {
+    - Integer id
+    - String name
+    - String description
+    - LocalDate startDate
+    - LocalDate endDate
+    - Set<Sample> samples
+    + Integer getId()
+    + void setId(Integer id)
+    + String getName()
+    + void setName(String name)
+    + void addSample(Sample sample)
+    + void removeSample(Sample sample)
+    ' Otros métodos según sea necesario
+}
+
+' ======== Repositorios ========
+
+interface SampleRepository <<JpaRepository>> {
+    + List<Sample> findByRegion(String region)
+    + List<Sample> findByDateBetween(LocalDate startDate, LocalDate endDate)
+    + List<Sample> findByTarget(String target)
+    ' Métodos CRUD heredados
+}
+
+interface CyberAttackSampleRepository <<JpaRepository>> {
+    + List<CyberAttackSample> findByAuthor(String author)
+    + List<CyberAttackSample> findByAttackType(String attackType)
+    ' Otros métodos específicos
+}
+
+interface SecurityIncidentSampleRepository <<JpaRepository>> {
+    + List<SecurityIncidentSample> findByActor(String actor)
+    + List<SecurityIncidentSample> findByEventType(String eventType)
+    ' Otros métodos específicos
+}
+
+interface ExperimentRepository <<JpaRepository>> {
+    + Experiment findByName(String name)
+    ' Otros métodos específicos
+}
+
+' ======== Servicios ========
+
+class SampleService {
+    - SampleRepository sampleRepository
+    - CyberAttackSampleRepository cyberAttackSampleRepository
+    - SecurityIncidentSampleRepository securityIncidentSampleRepository
+    - SampleFactory sampleFactory
+    - ExperimentRepository experimentRepository
+
+    + @Async void processSamples(List<Map<String, Object>> sampleDataList)
+    + List<Sample> getSamplesByRegion(String region)
+    + List<Sample> getSamplesByDateRange(LocalDate startDate, LocalDate endDate)
+    + List<Sample> getSamplesByTarget(String target)
+    + void saveSample(Sample sample)
+    + void assignSamplesToExperiment(Integer experimentId, List<Sample> samples)
+}
+
+class ExperimentService {
+    - ExperimentRepository experimentRepository
+
+    + Experiment createExperiment(String name, String description)
+    + void addSampleToExperiment(Integer experimentId, Sample sample)
+    + void removeSampleFromExperiment(Integer experimentId, Sample sample)
+    + List<Sample> getSamplesByExperiment(Integer experimentId)
+    + Experiment getExperimentById(Integer experimentId)
+}
+
+class ChartService {
+    - SampleService sampleService
+    - ExperimentService experimentService
+
+    + Chart generateAttackCountByRegionChart()
+    + Chart generateAttackCountByYearChart()
+    + Chart generateAttackTrendsByMonthChart()
+    + Chart generateTargetStatisticsChart()
+    + Chart generateActorTypeDistributionChart()
+    + Chart generateChartsForExperiment(Integer experimentId)
+}
+
+' ======== Controladores ========
+
+class SampleController {
+    - ChartService chartService
+    - ExperimentService experimentService
+
+    + ResponseEntity<?> getAttackCountByRegionChart()
+    + ResponseEntity<?> getAttackCountByYearChart()
+    + ResponseEntity<?> getAttackTrendsByMonthChart()
+    + ResponseEntity<?> getTargetStatisticsChart()
+    + ResponseEntity<?> getActorTypeDistributionChart()
+    + ResponseEntity<?> getChartsForExperiment(Integer experimentId)
+    + ResponseEntity<?> createExperiment(String name, String description)
+    + ResponseEntity<?> addSampleToExperiment(Integer experimentId, Integer sampleId)
+    ' Otros endpoints para gestionar experimentos
+}
+
+' ======== Fábrica ========
+
+class SampleFactory {
+    + Sample createSample(String type, Map<String, Object> data)
+}
+
+' ======== Clase Chart ========
+
+class Chart {
+    - String chartType
+    - Map<String, Object> data
+    + Map<String, Object> getData()
+    + void setData(Map<String, Object> data)
+    + String getChartType()
+    + void setChartType(String chartType)
+}
+
+' ======== Relaciones ========
+
+Sample <|-- CyberAttackSample
+Sample <|-- SecurityIncidentSample
+
+Experiment "1" o-- "*" Sample : "samples"
+
+SampleService o-- SampleRepository
+SampleService o-- CyberAttackSampleRepository
+SampleService o-- SecurityIncidentSampleRepository
+SampleService ..> SampleFactory
+SampleService o-- ExperimentRepository
+
+ExperimentService o-- ExperimentRepository
+ExperimentService o-- SampleService
+
+ChartService ..> SampleService
+ChartService ..> ExperimentService
+ChartService ..> Chart
+
+SampleController ..> ChartService
+SampleController ..> ExperimentService
+
+SampleFactory ..> CyberAttackSample
+SampleFactory ..> SecurityIncidentSample
+
+' Repositorios relacionados con sus entidades
+SampleRepository ..> Sample
+CyberAttackSampleRepository ..> CyberAttackSample
+SecurityIncidentSampleRepository ..> SecurityIncidentSample
+ExperimentRepository ..> Experiment
+
+@enduml

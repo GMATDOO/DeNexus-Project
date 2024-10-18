@@ -1,0 +1,60 @@
+@startuml
+title Diagrama de Casos de Uso del Sistema
+
+left to right direction
+
+' Definición de actores
+actor "Usuario" as Usuario
+actor "Administrador" as Administrador
+
+' Definición del sistema
+rectangle "Sistema de Gestión de Muestras y Experimentos" {
+
+    ' Casos de uso comunes
+    usecase "Visualizar Gráficos" as UC1
+
+    ' Casos de uso para Administrador
+    usecase "Crear Experimento" as UC2
+    usecase "Modificar Experimento" as UC3
+    usecase "Eliminar Experimento" as UC4
+    usecase "Agregar Muestra a Experimento" as UC5
+    usecase "Eliminar Muestra de Experimento" as UC6
+    usecase "Procesar Muestras" as UC7
+    usecase "Gestionar Gráficos" as UC8
+    usecase "Generar Reportes" as UC9
+    usecase "Gestionar Usuarios" as UC10
+    usecase "Exportar Datos" as UC11
+
+}
+
+' Relaciones entre actores y casos de uso
+Usuario --> UC1
+
+Administrador --> UC1
+Administrador --> UC2
+Administrador --> UC3
+Administrador --> UC4
+Administrador --> UC5
+Administrador --> UC6
+Administrador --> UC7
+Administrador --> UC8
+Administrador --> UC9
+Administrador --> UC10
+Administrador --> UC11
+
+' Relaciones entre casos de uso
+UC2 .> UC5 : «include»
+UC2 .> UC7 : «include»
+UC2 .> UC8 : «include»
+
+UC3 .> UC2 : «extend»
+UC4 .> UC2 : «extend»
+
+UC7 .> UC5 : «include»
+UC7 .> UC6 : «include»
+
+UC8 .> UC1 : «include»
+UC9 .> UC1 : «include»
+UC9 .> UC8 : «include»
+
+@enduml
