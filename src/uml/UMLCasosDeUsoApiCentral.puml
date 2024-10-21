@@ -1,0 +1,53 @@
+@startuml
+!define RECTANGLE class
+
+actor Usuario as user
+actor Administrador as admin
+
+rectangle "Web de la API Central" {
+  usecase "Visualizar gráficos\ny estadísticas" as UC1
+  usecase "Consultar incidentes\nde ciberseguridad" as UC3
+  usecase "Realizar consultas\na través del Chatbot" as UC4
+  usecase "Recibir notificaciones\nde errores" as UC5
+}
+
+rectangle "API Central" {
+  usecase "Procesar datos y\nconvertirlos en gráficos" as UC6
+  usecase "Recolectar datos de\nmúltiples bases de datos" as UC7
+  usecase "Notificar errores\nen la limpieza de datos" as UC8
+  usecase "Responder consultas\ndel chatbot" as UC9
+}
+
+rectangle "Sistema de Scraping y Limpieza de Datos" {
+  usecase "Realizar scraping de datos" as UC10
+  usecase "Limpiar y transformar los datos" as UC11
+}
+
+rectangle "Módulo de Reportes de Seguridad" {
+  usecase "Generar reportes\nde seguridad" as UC2
+}
+
+' Relaciones del Usuario con la web
+user --> UC1 : "Ver gráficos y estadísticas"
+user --> UC3 : "Consultar incidentes"
+user --> UC4 : "Consultar IA Chatbot"
+
+' Relaciones del Administrador con la web
+admin --> UC1 : "Ver gráficos y estadísticas"
+admin --> UC2 : "Generar reportes"
+admin --> UC3 : "Consultar incidentes"
+admin --> UC4 : "Consultar IA Chatbot"
+admin --> UC5 : "Recibir notificaciones de errores"
+
+' Relaciones de la web con la API Central
+UC1 --> UC6 : "Visualizar gráficos basados en datos procesados"
+UC2 --> UC6 : "Generar reportes de seguridad"
+UC3 --> UC7 : "Consulta a bases de datos"
+UC4 --> UC9 : "Consultar chatbot"
+
+' Relaciones entre Sistema de Scraping y API Central
+UC10 --> UC11 : "Scraping y limpieza"
+UC11 --> UC7 : "Proveer datos limpios a la API Central"
+UC8 <-- UC11 : "Reportar errores en la limpieza de datos"
+
+@enduml
