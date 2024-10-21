@@ -1,0 +1,72 @@
+# Computación en la nube con Microsoft Azure
+
+_**Este documento está estructurado en torno a los principios fundamentales de la computación en la nube y su integración con tecnologías como Spring Boot.**_
+
+## ¿Qué es Microsoft Azure?
+
+Microsoft Azure es una plataforma de computación en la nube que ofrece una amplia gama de servicios y soluciones escalables para empresas y desarrolladores.
+
+## ¿Por qué utilizar Azure?
+
+Azure ofrece una variedad de servicios útiles para diferentes escenarios empresariales y tecnológicos:
+
+- **Almacenamiento:** Gestiona grandes cantidades de datos con soluciones de almacenamiento escalables.
+- **Bases de datos:** Permite gestionar bases de datos en la nube sin preocuparse por la infraestructura.
+- **Redes:** Conectividad y configuración avanzada de redes, asegurando la comunicación eficiente entre servicios y redes.
+- **IA:** Azure ofrece integración de inteligencia artificial (IA), como la implementación de chatbots, esencial para automatizar tareas.
+- **Seguridad:** Servicios robustos de seguridad en la nube para garantizar la protección de los datos y aplicaciones.
+
+## Utilización de Azure
+
+Azure facilita diferentes casos de uso, entre ellos:
+
+- Migración de cargas de trabajo on-premises a la nube.
+- Desarrollo y despliegue de aplicaciones web y móviles.
+- Procesamiento y análisis de grandes volúmenes de datos (Big Data).
+- Implementación de soluciones de inteligencia artificial y machine learning.
+- Creación de entornos de desarrollo y prueba sin necesidad de infraestructura física.
+
+Recursos adicionales: [Microsoft Learn - Azure](https://learn.microsoft.com/es-es/azure/?product=popular)
+
+---
+
+## Integración de Azure con Spring Boot
+
+Azure facilita la integración de aplicaciones **Spring Boot** mediante una serie de herramientas y servicios.
+
+### Características de la integración:
+
+1. **Integración simplificada:** Con **Spring Cloud Azure**, se pueden integrar múltiples servicios de Azure como Cosmos DB, Key Vault, Azure Event Hubs, y Azure Blob Storage.
+2. **Gestión de autenticación y seguridad:** Uso de **Azure Active Directory** (AAD) para la administración de identidades y autenticaciones.
+3. **Configuración automática:** Spring Cloud Azure facilita la configuración de aplicaciones mediante **Azure App Configuration**.
+4. **Despliegue y administración:** Herramientas como **Azure Spring Apps** permiten gestionar aplicaciones Spring Boot con características avanzadas como escalabilidad automática y monitoreo en tiempo real.
+
+### ¿Por qué usar Spring Cloud Azure?
+
+- **Automatización:** Menos código y más configuración gracias a la integración automática con los servicios de Azure.
+- **Escalabilidad:** Despliegue nativo de aplicaciones Spring con escalabilidad gestionada.
+- **Eficiencia:** Spring Cloud Azure proporciona dependencias y configuraciones predefinidas, ahorrando tiempo en el desarrollo.
+
+---
+
+## ¿Cómo desplegar aplicaciones Spring Boot en Azure?
+
+Azure ofrece diversas herramientas para desplegar aplicaciones **Spring Boot** de manera eficiente:
+
+### Opciones de despliegue:
+
+- **Azure Spring Apps:** Plataforma completamente administrada para ejecutar aplicaciones Spring Boot sin necesidad de gestionar infraestructura.
+- **Azure App Service:** Servicio flexible para desplegar aplicaciones utilizando contenedores o paquetes JAR/WAR, con integración de servicios adicionales como bases de datos.
+- **Azure Kubernetes Service (AKS):** Despliega aplicaciones Spring Boot en un clúster de Kubernetes para un control más granular.
+- **Azure Functions:** Permite ejecutar funciones serverless integradas con Spring Boot.
+
+### Ventajas de desplegar Spring Boot en Azure
+
+- **Soporte integral para Java:** Ecosistema completo con herramientas como Visual Studio Code y extensiones de Maven para Azure.
+- **Monitoreo y telemetría:** Con **Application Insights** puedes monitorear el rendimiento de tus aplicaciones en tiempo real.
+- **Facilidad de integración:** Azure facilita la integración de servicios adicionales como **Cosmos DB**, **Blob Storage** o **Event Hubs**.
+- **Desarrollo y despliegue continuos (CI/CD):** Azure DevOps y GitHub Actions permiten automatizar el ciclo de vida de las aplicaciones Spring Boot, desde las pruebas hasta el despliegue final.
+
+---
+
+
