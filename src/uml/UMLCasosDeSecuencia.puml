@@ -1,0 +1,72 @@
+@startuml
+actor Cliente
+boundary SampleController
+control SampleService
+database SampleRepository
+
+Cliente -> SampleController: Solicitud HTTP
+activate SampleController
+
+SampleController -> SampleService: Ejecutar lógica de negocio
+activate SampleService
+
+SampleService -> SampleRepository: Consultar datos
+activate SampleRepository
+
+SampleRepository --> SampleService: Retornar datos
+deactivate SampleRepository
+
+SampleService --> SampleController: Retornar resultado
+deactivate SampleService
+
+SampleController --> Cliente: Respuesta HTTP
+deactivate SampleController
+
+' Additional classes and interactions
+control ExperimentService
+control ChartService
+control SampleFactory
+entity Sample
+entity CyberAttackSample
+entity SecurityIncidentSample
+entity Experiment
+entity Chart
+
+SampleService -> CyberAttackSampleRepository: Consultar datos de ciberataques
+activate CyberAttackSampleRepository
+CyberAttackSampleRepository --> SampleService: Retornar datos de ciberataques
+deactivate CyberAttackSampleRepository
+
+SampleService -> SecurityIncidentSampleRepository: Consultar datos de incidentes de seguridad
+activate SecurityIncidentSampleRepository
+SecurityIncidentSampleRepository --> SampleService: Retornar datos de incidentes de seguridad
+deactivate SecurityIncidentSampleRepository
+
+SampleService -> ExperimentRepository: Consultar datos de experimentos
+activate ExperimentRepository
+ExperimentRepository --> SampleService: Retornar datos de experimentos
+deactivate ExperimentRepository
+
+SampleService -> SampleFactory: Crear muestra
+activate SampleFactory
+SampleFactory --> SampleService: Retornar muestra creada
+deactivate SampleFactory
+
+SampleController -> ChartService: Generar gráficos
+activate ChartService
+ChartService -> SampleService: Obtener datos para gráficos
+activate SampleService
+SampleService --> ChartService: Retornar datos para gráficos
+deactivate SampleService
+ChartService --> SampleController: Retornar gráficos generados
+deactivate ChartService
+
+SampleController -> ExperimentService: Gestionar experimentos
+activate ExperimentService
+ExperimentService -> ExperimentRepository: Consultar/actualizar datos de experimentos
+activate ExperimentRepository
+ExperimentRepository --> ExperimentService: Retornar datos de experimentos
+deactivate ExperimentRepository
+ExperimentService --> SampleController: Retornar resultado de gestión de experimentos
+deactivate ExperimentService
+@enduml
