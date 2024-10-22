@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Cargar la etiqueta 'static' de Django -->
+    {% load static %}
+    
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    
     <title>Página de Inicio</title>
 </head>
 <body>
-    <h1>Gráficos de Incidentes de Seguridad</h1>
+    <h1>Bienvenido a la Página de Inicio</h1>
 
-    <!-- Mostrar el gráfico generado en la vista -->
-    <h2>Incidentes por Año</h2>
-    <img src="data:image/png;base64,{{ grafico_incidentes }}" alt="Gráfico de Incidentes por Año">
-
-    <h2>Realizar Análisis de Machine Learning</h2>
-    <p>A continuación, puedes utilizar estos datos para aplicar técnicas de Machine Learning:</p>
-
-    <!-- Enlaces para vistas adicionales -->
-    <ul>
-        <li><a href="{% url 'incidentes_por_actor' 1 %}">Ver Incidentes por Actor</a></li>
-        <li><a href="{% url 'incidentes_por_tipo_ataque' 1 %}">Ver Incidentes por Tipo de Ataque</a></li>
-        <li><a href="{% url 'incidentes_por_region' 1 %}">Ver Incidentes por Región</a></li>
-    </ul>
+    {% if grafico_incidentes %}
+        <img src="data:image/png;base64,{{ grafico_incidentes }}" alt="Gráfico de incidentes por año">
+    {% elif mensaje %}
+        <p>{{ mensaje }}</p>
+    {% endif %}
 </body>
 </html>
+
+
