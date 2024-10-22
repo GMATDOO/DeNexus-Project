@@ -7,3 +7,5 @@ class SeguridadConfig(AppConfig):
 
     def ready(self):
         import seguridad.signals  # Importar las señales para que se ejecuten
+
+

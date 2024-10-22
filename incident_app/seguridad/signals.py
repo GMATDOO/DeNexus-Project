@@ -1,90 +1,101 @@
 import csv
+import os
+from datetime import datetime
+from django.conf import settings
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 from .models import Actor, TipoAtaque, Region, Incidente
-import pandas as pd
-from django.db.utils import IntegrityError
 
+# Función para cargar los datos de HACKMAGEDDON
 def cargar_datos_hackmageddon():
+    ruta_csv = os.path.join(settings.BASE_DIR, 'data', 'HACKMAGEDDON_clean.csv')
     try:
-        print("Iniciando la carga de datos de HACKMAGEDDON...")
-        with open('data/HACKMAGEDDON_clean.csv', 'r') as file:
+        with open(ruta_csv, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                print(f"Procesando fila: {row}")
-                # Manejo de valores por defecto para la región
                 region_name = row.get('Region', 'Unknown')
                 region, _ = Region.objects.get_or_create(name=region_name)
-                print(f"Región: {region_name}")
 
-                # Obtener o crear Actor y Tipo de Ataque
                 actor, _ = Actor.objects.get_or_create(name=row.get('Author', 'Unknown'), actor_type=row.get('Actor Type', 'Unknown'))
-                print(f"Actor: {actor.name}")
-                
                 tipo_ataque, _ = TipoAtaque.objects.get_or_create(tipo=row.get('Attack', 'Unknown'))
-                print(f"Tipo de ataque: {tipo_ataque.tipo}")
 
-                # Convertir la fecha a un formato adecuado
-                try:
-                    fecha_incidente = pd.to_datetime(row.get('Date Occurred', 'Unknown'), errors='coerce').date()
-                    print(f"Fecha incidente: {fecha_incidente}")
-                except Exception as e:
-                    print(f"Error al parsear la fecha en la fila {row}: {e}")
-                    fecha_incidente = None
+                # Extraer la fecha y manejar errores
+                event_date_str = row.get('Date Occurred', None)
+                day, month, year = None, None, 2023  # Valores por defecto
+
+                if event_date_str:
+                    try:
+                        event_date = datetime.strptime(event_date_str, '%Y-%m-%d')
+                        day = event_date.day
+                        month = event_date.month
+                        year = event_date.year
+                    except ValueError:
+                        print(f"Error al convertir la fecha {event_date_str}, usando valores predeterminados.")
 
                 # Crear o actualizar el incidente
                 Incidente.objects.get_or_create(
                     actor=actor,
                     tipo_ataque=tipo_ataque,
                     region=region,
-                    year=row.get('Year', 2023),  # Si no hay año, usar 2023 por defecto
+                    year=year,
+                    month=month,
+                    day=day,
                     description=row.get('Description', ''),
-                    event_date=fecha_incidente
+                    event_date=event_date_str or 'Desconocida'
                 )
-                print("Incidente creado o actualizado correctamente")
-
-    except FileNotFoundError as e:
-        print(f"Archivo no encontrado: {e}")
+        print("Datos cargados correctamente de HACKMAGEDDON")
+    except FileNotFoundError:
+        print(f"El archivo {ruta_csv} no se encontró")
     except Exception as e:
-        print(f"Error al procesar los datos: {e}")
+        print(f"Error al cargar datos: {e}")
 
+# Función para cargar los datos de CISSM
 def cargar_datos_cissm():
+    ruta_csv = os.path.join(settings.BASE_DIR, 'data', 'CISSM_clean.csv')
     try:
-        print("Iniciando la carga de datos de CISSM...")
-        with open('data/CISSM_clean.csv', 'r') as file:
+        with open(ruta_csv, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                print(f"Procesando fila: {row}")
-                # Manejo de valores por defecto para la región
                 region_name = row.get('Region', 'Unknown')
                 region, _ = Region.objects.get_or_create(name=region_name)
-                print(f"Región: {region_name}")
 
-                # Obtener o crear Actor y Tipo de Ataque
                 actor, _ = Actor.objects.get_or_create(name=row.get('Actor', 'Unknown'), actor_type=row.get('Actor Type', 'Unknown'))
-                print(f"Actor: {actor.name}")
-                
                 tipo_ataque, _ = TipoAtaque.objects.get_or_create(tipo=row.get('Event Type', 'Unknown'))
-                print(f"Tipo de ataque: {tipo_ataque.tipo}")
 
-                # Convertir la fecha a un formato adecuado
-                try:
-                    fecha_incidente = pd.to_datetime(row.get('Event Date', 'Unknown'), errors='coerce').date()
-                    print(f"Fecha incidente: {fecha_incidente}")
-                except Exception as e:
-                    print(f"Error al parsear la fecha en la fila {row}: {e}")
-                    fecha_incidente = None
+                # Extraer la fecha y manejar errores
+                event_date_str = row.get('Event Date', None)
+                day, month, year = None, None, 2023  # Valores por defecto
+
+                if event_date_str:
+                    try:
+                        event_date = datetime.strptime(event_date_str, '%Y-%m-%d')
+                        day = event_date.day
+                        month = event_date.month
+                        year = event_date.year
+                    except ValueError:
+                        print(f"Error al convertir la fecha {event_date_str}, usando valores predeterminados.")
 
                 # Crear o actualizar el incidente
                 Incidente.objects.get_or_create(
                     actor=actor,
                     tipo_ataque=tipo_ataque,
                     region=region,
-                    year=row.get('Year', 2023),  # Si no hay año, usar 2023 por defecto
+                    year=year,
+                    month=month,
+                    day=day,
                     description=row.get('Event Description', ''),
-                    event_date=fecha_incidente
+                    event_date=event_date_str or 'Desconocida'
                 )
-                print("Incidente creado o actualizado correctamente")
-
-    except FileNotFoundError as e:
-        print(f"Archivo no encontrado: {e}")
+        print("Datos cargados correctamente de CISSM")
+    except FileNotFoundError:
+        print(f"El archivo {ruta_csv} no se encontró")
     except Exception as e:
-        print(f"Error al procesar los datos: {e}")
+        print(f"Error al cargar datos: {e}")
+
+# Conectar la función al evento post_migrate para que se carguen los datos al hacer migraciones
+@receiver(post_migrate)
+def cargar_datos_automaticamente(sender, **kwargs):
+    cargar_datos_hackmageddon()
+    cargar_datos_cissm()
+
+

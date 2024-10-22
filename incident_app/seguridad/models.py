@@ -33,8 +33,8 @@ class Organization(models.Model):
 class Incidente(models.Model):
     description = models.TextField()  # Descripción del incidente
     event_date = models.CharField(max_length=255)  # Fecha del incidente
-    day = models.IntegerField()  # Día del evento
-    month = models.IntegerField()  # Mes del evento
+    day = models.IntegerField(null=True, blank=True)  # Día del evento (permitir nulos)
+    month = models.IntegerField(null=True, blank=True)  # Mes del evento (permitir nulos)
     year = models.IntegerField()  # Año del evento
     motive = models.CharField(max_length=255, null=True, blank=True)  # Motivo del incidente
     motive_code = models.FloatField(null=True, blank=True)
