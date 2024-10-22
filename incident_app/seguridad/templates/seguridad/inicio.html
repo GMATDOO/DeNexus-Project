@@ -4,23 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Cargar la etiqueta 'static' de Django -->
+    <!-- Cargar la etiqueta 'static' para archivos estáticos -->
     {% load static %}
     
     <!-- Enlace al archivo CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     
-    <title>Página de Inicio</title>
+    <title>Inicio | Dashboard de Incidentes</title>
 </head>
 <body>
-    <h1>Bienvenido a la Página de Inicio</h1>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'inicio' %}">Inicio</a></li>
+                <li><a href="{% url 'incidentes_por_actor' actor_id=1 %}">Incidentes por Actor</a></li>
+                <li><a href="{% url 'incidentes_por_tipo_ataque' tipo_id=1 %}">Incidentes por Tipo de Ataque</a></li>
+                <li><a href="{% url 'incidentes_por_region' region_id=1 %}">Incidentes por Región</a></li>
+                <li><a href="{% url 'descargar_datos' %}">Descargar Datos CSV</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    {% if grafico_incidentes %}
-        <img src="data:image/png;base64,{{ grafico_incidentes }}" alt="Gráfico de incidentes por año">
-    {% elif mensaje %}
-        <p>{{ mensaje }}</p>
-    {% endif %}
+    <!-- Contenido principal -->
+    <main>
+        <section class="intro">
+            <h1>Bienvenido a la Página de Inicio</h1>
+            <p>Explora los datos de incidentes por actores, tipos de ataque, regiones y más. Genera informes personalizados y descárgalos para tus análisis.</p>
+        </section>
+
+        <!-- Mostrar gráfico o mensaje de advertencia -->
+        <section class="grafico">
+            {% if grafico_incidentes %}
+                <h2>Gráfico de Incidentes por Año</h2>
+                <img src="data:image/png;base64,{{ grafico_incidentes }}" alt="Gráfico de incidentes por año">
+            {% elif mensaje %}
+                <div class="alert alert-warning">
+                    <p>{{ mensaje }}</p>
+                </div>
+            {% else %}
+                <p>No hay suficientes datos para generar el gráfico.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Dashboard de Incidentes. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
-
 
