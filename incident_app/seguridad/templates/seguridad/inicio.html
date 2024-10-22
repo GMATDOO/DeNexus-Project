@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio</title>
+</head>
+<body>
+    <h1>Gráficos de Incidentes de Seguridad</h1>
+
+    <!-- Mostrar el gráfico generado en la vista -->
+    <h2>Incidentes por Año</h2>
+    <img src="data:image/png;base64,{{ grafico_incidentes }}" alt="Gráfico de Incidentes por Año">
+
+    <h2>Realizar Análisis de Machine Learning</h2>
+    <p>A continuación, puedes utilizar estos datos para aplicar técnicas de Machine Learning:</p>
+
+    <!-- Enlaces para vistas adicionales -->
+    <ul>
+        <li><a href="{% url 'incidentes_por_actor' 1 %}">Ver Incidentes por Actor</a></li>
+        <li><a href="{% url 'incidentes_por_tipo_ataque' 1 %}">Ver Incidentes por Tipo de Ataque</a></li>
+        <li><a href="{% url 'incidentes_por_region' 1 %}">Ver Incidentes por Región</a></li>
+    </ul>
+</body>
+</html>

@@ -1,7 +1,11 @@
 from django.contrib import admin
-from .models import HackmageddonIncident, CissmIncident
+from .models import Actor, TipoAtaque, Region, Organization, Incidente
 
-# Registrar los modelos en el panel de administración
-admin.site.register(HackmageddonIncident)
-admin.site.register(CissmIncident)
+# Registrar las dimensiones y la tabla de hechos
+admin.site.register(Actor)
+admin.site.register(TipoAtaque)
+admin.site.register(Region)
+admin.site.register(Organization)
+admin.site.register(Incidente)
+
 

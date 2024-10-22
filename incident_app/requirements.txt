@@ -4,6 +4,22 @@ mysqlclient>=2.0  # Si estás usando MySQL como base de datos, si no, omítelo
 pytz              # Necesario para manejar zonas horarias en Django
 sqlparse          # Dependencia interna de Django para análisis SQL
 coverage          # Para medir la cobertura de tests en el código
+numpy             # Para manejar arrays y operaciones matemáticas
+pandas            # Para manejar estructuras de datos y análisis de datos
+requests          # Para hacer peticiones HTTP
+matplotlib        # Para hacer gráficos
+django-crispy-forms # Para manejar formularios de forma más sencilla
+django-filter     # Para filtrar resultados en las vistas
+django-extensions # Para añadir funcionalidades extra a Django
+django-environ    # Para cargar variables de entorno en Django
+django-sslserver  # Para servir la aplicación en local con HTTPS
+django-debug-toolbar # Para depurar la aplicación
+django-redis      # Para usar Redis como caché en Django
+redis             # Para instalar Redis
+celery            # Para gestionar tareas asíncronas
+plotpy            # Para hacer gráficos
+django-plotly-dash # Para integrar Dash en Django
+
 
 #pip install -r requirements.txt
 

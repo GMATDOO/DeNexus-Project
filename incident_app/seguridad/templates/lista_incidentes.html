@@ -6,17 +6,19 @@
     <title>Lista de Incidentes</title>
 </head>
 <body>
-    <h1>Incidentes de HACKMAGEDDON</h1>
+    <h1>Incidentes de Seguridad</h1>
+
+    <h2>Incidentes de HACKMAGEDDON</h2>
     <ul>
     {% for incidente in hackmageddon_incidentes %}
-        <li>{{ incidente.author }} - {{ incidente.description }} ({{ incidente.year }})</li>
+        <li>{{ incidente.actor.name }} realizó un ataque de tipo {{ incidente.tipo_ataque.tipo }} en {{ incidente.region.name }} el {{ incidente.event_date }}</li>
     {% endfor %}
     </ul>
 
-    <h1>Incidentes de CISSM</h1>
+    <h2>Incidentes de CISSM</h2>
     <ul>
     {% for incidente in cissm_incidentes %}
-        <li>{{ incidente.actor }} - {{ incidente.event_description }} ({{ incidente.year }})</li>
+        <li>{{ incidente.actor.name }} atacó a {{ incidente.organization.name }} con un ataque de tipo {{ incidente.tipo_ataque.tipo }} en {{ incidente.region.name }} el {{ incidente.event_date }}</li>
     {% endfor %}
     </ul>
 </body>

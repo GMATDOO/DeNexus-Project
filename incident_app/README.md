@@ -135,3 +135,21 @@ Colocar los archivos HACKMAGEDDON_clean.csv y CISSM_clean.csv en la carpeta data
 
 Bash
 python manage.py runserver
+
+Paso 10: Probar la Aplicación
+Ejecuta el servidor de desarrollo de Django:
+bash
+Copiar código
+python manage.py runserver
+Accede a las URLs para importar los datos desde los CSV:
+Para cargar los datos de HACKMAGEDDON:
+
+
+http://127.0.0.1:8000/cargar_datos_hackmageddon/
+Para cargar los datos de CISSM:
+
+
+http://127.0.0.1:8000/cargar_datos_cissm/
+Gestiona los datos desde el panel de administración:
+
+http://127.0.0.1:8000/admin/

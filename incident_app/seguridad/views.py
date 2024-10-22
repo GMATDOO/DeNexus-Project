@@ -1,59 +1,52 @@
-import csv
-from django.http import HttpResponse
-from .models import HackmageddonIncident, CissmIncident
+import matplotlib.pyplot as plt
+import pandas as pd
+from io import BytesIO
+import base64
+from django.shortcuts import render
+from .models import Incidente
 
-# Vista para cargar los datos de HACKMAGEDDON desde CSV
-def cargar_datos_hackmageddon(request):
-    with open('data/HACKMAGEDDON_clean.csv', newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            HackmageddonIncident.objects.create(
-                author=row['Author'],
-                target=row['Target'],
-                description=row['Description'],
-                attack=row['Attack'],
-                target_class=row['Target Class'],
-                attack_class=row['Attack Class'],
-                link=row['Link'],
-                tags=row['Tags'],
-                day=row['Day'],
-                month=row['Month'],
-                year=row['Year'],
-                africa=row['Africa'],
-                asia=row['Asia'],
-                europe=row['Europe'],
-                north_america=row['North America'],
-                oceania=row['Oceania'],
-                south_america=row['South America'],
-            )
-    return HttpResponse("Datos de HACKMAGEDDON importados correctamente.")
+# Generar gráficos basados en los incidentes
+def generar_graficos():
+    # Obtener datos de la base de datos
+    incidentes = Incidente.objects.all()
+    
+    # Convertir los datos a un DataFrame de Pandas para el análisis
+    data = {
+        'actor': [incidente.actor.name for incidente in incidentes],
+        'tipo_ataque': [incidente.tipo_ataque.tipo for incidente in incidentes],
+        'region': [incidente.region.name for incidente in incidentes],
+        'year': [incidente.year for incidente in incidentes],
+        'motive': [incidente.motive for incidente in incidentes if incidente.motive]
+    }
+    
+    df = pd.DataFrame(data)
+    
+    # Gráfico de número de incidentes por año
+    incidentes_por_ano = df.groupby('year').size()
+    fig, ax = plt.subplots()
+    incidentes_por_ano.plot(kind='bar', ax=ax)
+    ax.set_title('Incidentes por Año')
+    ax.set_xlabel('Año')
+    ax.set_ylabel('Número de Incidentes')
+    
+    # Guardar el gráfico en memoria como PNG
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+    
+    # Convertir la imagen a base64 para mostrarla en HTML
+    grafico_base64 = base64.b64encode(image_png).decode('utf-8')
+    return grafico_base64
 
-# Vista para cargar los datos de CISSM desde CSV
-def cargar_datos_cissm(request):
-    with open('data/CISSM_clean.csv', newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            CissmIncident.objects.create(
-                id=row['id'],
-                event_description=row['event_description'],
-                event_date=row['event_date'],
-                actor=row['actor'],
-                actor_type=row['actor_type'],
-                event_type=row['event_type'],
-                organization=row['organization'],
-                event_subtype=row['event_subtype'],
-                motive=row['motive'],
-                motive_code=row['motive_code'],
-                event_source=row['event_source'],
-                day=row['day'],
-                month=row['month'],
-                year=row['year'],
-                africa=row['Africa'],
-                asia=row['Asia'],
-                australia=row['Australia'],
-                europe=row['Europe'],
-                north_america=row['North America'],
-                south_america=row['South America'],
-            )
-    return HttpResponse("Datos de CISSM importados correctamente.")
+# Vista para mostrar la página de inicio con gráficos
+def inicio(request):
+    # Generar el gráfico
+    grafico_incidentes = generar_graficos()
+    
+    # Pasar el gráfico a la plantilla
+    return render(request, 'seguridad/inicio.html', {
+        'grafico_incidentes': grafico_incidentes
+    })
 

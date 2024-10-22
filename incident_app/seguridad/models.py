@@ -1,51 +1,50 @@
 from django.db import models
 
-# Modelo para HACKMAGEDDON
-class HackmageddonIncident(models.Model):
-    author = models.CharField(max_length=255)
-    target = models.CharField(max_length=255)
-    description = models.TextField()
-    attack = models.FloatField()
-    target_class = models.FloatField()
-    attack_class = models.FloatField()
-    link = models.URLField()
-    tags = models.TextField()
-    day = models.IntegerField()
-    month = models.IntegerField()
-    year = models.IntegerField()
-    africa = models.IntegerField()
-    asia = models.IntegerField()
-    europe = models.IntegerField()
-    north_america = models.IntegerField()
-    oceania = models.IntegerField()
-    south_america = models.IntegerField()
+# Dimensión: Actor
+class Actor(models.Model):
+    name = models.CharField(max_length=255)
+    actor_type = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"Incident by {self.author} targeting {self.target}"
+        return self.name
 
-# Modelo para CISSM
-class CissmIncident(models.Model):
-    id = models.CharField(max_length=255, primary_key=True)
-    event_description = models.TextField()
-    event_date = models.CharField(max_length=255)
-    actor = models.CharField(max_length=255)
-    actor_type = models.FloatField()
-    event_type = models.CharField(max_length=255)
-    organization = models.CharField(max_length=255)
-    event_subtype = models.CharField(max_length=255)
-    motive = models.CharField(max_length=255)
-    motive_code = models.FloatField()
-    event_source = models.CharField(max_length=255)
-    day = models.IntegerField()
-    month = models.IntegerField()
-    year = models.IntegerField()
-    africa = models.IntegerField()
-    asia = models.IntegerField()
-    australia = models.IntegerField()
-    europe = models.IntegerField()
-    north_america = models.IntegerField()
-    south_america = models.IntegerField()
+# Dimensión: Tipo de Ataque
+class TipoAtaque(models.Model):
+    tipo = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"Incident by {self.actor} on {self.organization}"
+        return self.tipo
+
+# Dimensión: Región
+class Region(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+# Dimensión: Organización (para CISSM)
+class Organization(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+# Tabla de Hechos: Incidente
+class Incidente(models.Model):
+    description = models.TextField()  # Descripción del incidente
+    event_date = models.CharField(max_length=255)  # Fecha del incidente
+    day = models.IntegerField()  # Día del evento
+    month = models.IntegerField()  # Mes del evento
+    year = models.IntegerField()  # Año del evento
+    motive = models.CharField(max_length=255, null=True, blank=True)  # Motivo del incidente
+    motive_code = models.FloatField(null=True, blank=True)
+
+    # Relación con dimensiones
+    actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
+    tipo_ataque = models.ForeignKey(TipoAtaque, on_delete=models.CASCADE)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, null=True, blank=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Incidente de {self.actor} en {self.organization} ({self.year})"
 
