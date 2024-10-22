@@ -14,13 +14,20 @@ def generar_graficos():
     if not incidentes.exists():
         return None  # No hay incidentes para mostrar
     
-    # Convertir los datos a un DataFrame de Pandas para el análisis
+    # Convertir los datos a listas, asegurando que todas las listas tienen la misma longitud
+    actores = [incidente.actor.name for incidente in incidentes]
+    tipos_ataque = [incidente.tipo_ataque.tipo for incidente in incidentes]
+    regiones = [incidente.region.name for incidente in incidentes]
+    anios = [incidente.year for incidente in incidentes]
+    motivos = [incidente.motive if incidente.motive else 'N/A' for incidente in incidentes]
+
+    # Crear el DataFrame
     data = {
-        'actor': [incidente.actor.name for incidente in incidentes],
-        'tipo_ataque': [incidente.tipo_ataque.tipo for incidente in incidentes],
-        'region': [incidente.region.name for incidente in incidentes],
-        'year': [incidente.year for incidente in incidentes],
-        'motive': [incidente.motive for incidente in incidentes if incidente.motive]
+        'actor': actores,
+        'tipo_ataque': tipos_ataque,
+        'region': regiones,
+        'year': anios,
+        'motive': motivos
     }
     
     df = pd.DataFrame(data)
@@ -109,4 +116,5 @@ def incidentes_por_region(request, region_id):
     region = get_object_or_404(Region, id=region_id)
     incidentes = Incidente.objects.filter(region=region)
     return render(request, 'seguridad/incidentes_por_region.html', {'region': region, 'incidentes': incidentes})
+
 
