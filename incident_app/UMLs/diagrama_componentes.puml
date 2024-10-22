@@ -1,0 +1,33 @@
+@startuml
+
+' Diagrama de Componentes
+
+package "Sistema de Ciberseguridad" {
+  
+  [Django Backend] --> [Base de Datos]
+  [Django Backend] --> [Plantillas HTML]
+  
+  component "Incidentes" {
+    [Modelo Incidente] --> [Usuario]
+    [Modelo Incidente] --> [Dispositivo]
+    [Modelo Incidente] --> [Tipo Incidente]
+  }
+  
+  component "Usuarios" {
+    [Vista Usuarios] --> [Modelo Usuario]
+  }
+  
+  component "Dispositivos" {
+    [Vista Dispositivos] --> [Modelo Dispositivo]
+  }
+
+  component "Tipos de Incidente" {
+    [Vista Tipos] --> [Modelo Tipo Incidente]
+  }
+  
+  [Plantillas HTML] --> [Vista Usuarios]
+  [Plantillas HTML] --> [Vista Dispositivos]
+  [Plantillas HTML] --> [Vista Incidentes]
+}
+
+@enduml

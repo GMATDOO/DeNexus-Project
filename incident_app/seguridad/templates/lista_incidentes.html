@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Incidentes</title>
+</head>
+<body>
+    <h1>Incidentes de HACKMAGEDDON</h1>
+    <ul>
+    {% for incidente in hackmageddon_incidentes %}
+        <li>{{ incidente.author }} - {{ incidente.description }} ({{ incidente.year }})</li>
+    {% endfor %}
+    </ul>
+
+    <h1>Incidentes de CISSM</h1>
+    <ul>
+    {% for incidente in cissm_incidentes %}
+        <li>{{ incidente.actor }} - {{ incidente.event_description }} ({{ incidente.year }})</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,9 @@
+Django>=3.2,<4.0  # La versión de Django que prefieras, o ajustada a tu entorno
+psycopg2>=2.9     # Si estás usando PostgreSQL como base de datos, si no, omite este
+mysqlclient>=2.0  # Si estás usando MySQL como base de datos, si no, omítelo
+pytz              # Necesario para manejar zonas horarias en Django
+sqlparse          # Dependencia interna de Django para análisis SQL
+coverage          # Para medir la cobertura de tests en el código
+
+#pip install -r requirements.txt
+
